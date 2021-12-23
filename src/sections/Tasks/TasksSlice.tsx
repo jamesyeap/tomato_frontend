@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { Dispatch } from "redux";
+import { useQuery } from 'react-query'
 
 export const TasksSlice = createSlice({
 	name: 'tasks',
@@ -18,9 +19,13 @@ export const TasksSlice = createSlice({
 
 export const { updateTaskList } = TasksSlice.actions
 
+const fetchTasks_API = () => {
+	// TODO: return a Promise 
+}
+
 // thunks: use this form for functions with asynchronous calls
 export const fetchAllTasksAsync = () => (dispatch:Dispatch) => {
-	// TODO
+	const info = useQuery('tasks', fetchTasks_API);
 
 	// mock fetch
 	setTimeout(() => {

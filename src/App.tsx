@@ -7,20 +7,29 @@ import DeletableCategory from './components/Category/DeletableCategory'
 import Task from './components/Task/Task';
 import Tasks from './sections/Tasks/Tasks';
 
+import {
+  QueryClient,
+  QueryClientProvider
+} from 'react-query';
+
 // store
 import { Provider } from 'react-redux'
 import { store } from './store'
 
+const queryClient = new QueryClient();
+
 function App() {
   return (
     <Provider store={store}>
-      <Container>
-        {/* <DeletableCategory />
-        <Category /> */}
+      <QueryClientProvider client={queryClient}>
+        <Container>
+          {/* <DeletableCategory /> */}
+          {/* <Category /> */}
 
-        {/* <Task name="Task 1" description="hello"/> */}
-        <Tasks />
-      </Container>
+          {/* <Task name="Task 1" description="hello"/> */}
+          <Tasks />
+        </Container>
+      </QueryClientProvider>
     </Provider>
   );
 }
