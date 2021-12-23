@@ -1,46 +1,23 @@
-# Getting Started with Create React App
+# some notes to myself
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Building a Docker Image
+To build the Docker image in `dev` mode, run the following:
+```
+docker build -t tomato_frontend:dev .
+```
+Source: https://mherman.org/blog/dockerizing-a-react-app/
 
-## Available Scripts
+note: You only need to build the image once, and use it until the installed dependencies (like Python packages) or OS-level package versions need to be changed. Not every time your code is modified.
 
-In the project directory, you can run:
+## Starting a Docker Image
+To start the Docker container in `dev` mode, run the following:
+```
+docker run \
+    -d \
+    -p 3000:3000 \
+    tomato_frontend:dev
+```
+-d: This runs your container in detached mode. Simply put, when you leave a terminal session, it keeps your container running still.
+-p: This is used to publish the port you would like your application to run on. If you run your container without publishing a port, whatever is running in your container will only be accessible in your container.
 
-### `yarn start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+Source: https://medium.com/geekculture/getting-started-with-docker-in-your-react-js-application-the-basics-6e5300cf749d
