@@ -1,4 +1,4 @@
-import { Grid, Checkbox, IconButton, Typography, Stack, Button } from "@mui/material";
+import { Grid, Checkbox, IconButton, Typography, Stack, Button, TextField } from "@mui/material";
 import { useState } from "react";
 
 import Category from "../Category/Category";
@@ -8,6 +8,7 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SaveAsIcon from '@mui/icons-material/SaveAs';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import DeletableCategory from "../Category/DeletableCategory";
 
 interface TaskProps {
 	name:string,
@@ -17,6 +18,19 @@ interface TaskProps {
 export default function Task(props:TaskProps) {
 	const [isExpanded, setIsExpanded] = useState(false);
 	const [isEditing, setIsEditing] = useState(false);
+
+	const [name, setName] = useState(props.name);
+	const [description, setDescription] = useState(props.description);
+
+	// handles control of "name" field of Task in editing mode
+	const handleChangeName = (e:any) => {
+		setName(e.target.value);
+	} 
+
+	// handles control of "description" field of Task in editing mode
+	const handleChangeDescription = (e:any) => {
+		setDescription(e.target.value);
+	} 
 
 	// handles completion of Tasks
 	const handleComplete = () => {
@@ -32,6 +46,7 @@ export default function Task(props:TaskProps) {
 	const handleStartEdit = () => {
 		// TODO
 		setIsEditing(true);
+		setIsExpanded(false);
 	}
 	const handleDiscardEdit = () => {
 		// TODO
@@ -72,12 +87,11 @@ export default function Task(props:TaskProps) {
 				
 				<Grid item>
 					{isEditing
-						? <Typography variant="h6" sx={{fontWeight: 'bold', color: '#646871', bgcolor:'#F4F6FA', width: 400, borderRadius: 5, padding: 1}}>{props.name}</Typography>
+						? <TextField variant="outlined" fullWidth={true} multiline={true} sx={{width: 400, bgcolor:'#F4F6FA'}} value={name} onChange={handleChangeName} />
 						: <Typography variant="h6" sx={{fontWeight: 'bold', color: '#646871', width: 400, borderRadius: 5, padding: 1}}>{props.name}</Typography>
 					}
 				</Grid>
 				
-
 				<Grid item>
 					<Stack>
 						{/* Button-Group with "COMPLETE", "EDIT" and "DELETE" functions */}
@@ -126,15 +140,19 @@ export default function Task(props:TaskProps) {
 		</Grid>
 
 		<Grid item>
-			{isExpanded && (<Typography variant="body2" paragraph={true} sx={{color: '#A9ACAD'}}>{props.description}</Typography>)}
+			{isEditing
+				? <TextField variant="outlined" fullWidth={true} multiline={true} sx={{width: 530, bgcolor:'#F4F6FA'}} value={description} onChange={handleChangeDescription} />
+				: isExpanded
+					? (<Typography variant="body2" paragraph={true} sx={{color: '#A9ACAD'}}>{props.description}</Typography>)
+					: null
+			}
 		</Grid>
-
+		
 		<Grid item>
-			{isEditing && (<Typography variant="body2" paragraph={true} sx={{color: '#A9ACAD', bgcolor:'#F4F6FA', width: 530, borderRadius: 5, padding: 1}}>{props.description}</Typography>)}
-		</Grid>
-
-		<Grid item>
-			<Grid container><Category name="category 1"/></Grid>
+			{isEditing
+				? (<Grid container><DeletableCategory name="category 1"/></Grid>)
+				: (<Grid container><Category name="category 1"/></Grid>)
+			}
 		</Grid>
 	</Grid>
 	)
