@@ -45,7 +45,7 @@ export default function Task(props:TaskProps) {
 			xs='auto'
 			>
 				<Grid item>
-					<Typography variant="h4" sx={{fontWeight: 'bold', color: '#646871'}}>Task 1</Typography>
+					<Typography variant="h6" sx={{fontWeight: 'bold', color: '#646871'}}>{props.name}</Typography>
 				</Grid>
 
 				<Grid item>
@@ -79,7 +79,7 @@ export default function Task(props:TaskProps) {
 		</Grid>
 
 		<Grid item>
-			{isExpanded && (<Typography variant="body2" paragraph={true} sx={{color: '#A9ACAD'}}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed placerat iaculis urna, maximus luctus sem faucibus quis. Aliquam porta dui sed diam ornare, eget pulvinar urna egestas. Suspendisse non porttitor augue. Nullam at lobortis magna. In eget purus at neque malesuada accumsan. Suspendisse potenti. Maecenas efficitur interdum libero, blandit ullamcorper urna fringilla quis. Pellentesque ut augue mollis ex suscipit finibus nec at orci. Maecenas consequat massa lacus, eu placerat purus hendrerit vel. </Typography>)}
+			{isExpanded && (<Typography variant="body2" paragraph={true} sx={{color: '#A9ACAD'}}>{props.description}</Typography>)}
 		</Grid>
 
 		<Grid item>
