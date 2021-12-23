@@ -14,7 +14,10 @@ To start the Docker container in `dev` mode, run the following:
 ```
 docker run \
     -d \
+    --rm \
     -p 3000:3000 \
+    -v ${PWD}:/app \
+    -e CHOKIDAR_USEPOLLING=true \
     tomato_frontend:dev
 ```
 -d: This runs your container in detached mode. Simply put, when you leave a terminal session, it keeps your container running still.
