@@ -1,7 +1,7 @@
 /* Section that holds all tasks */
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../store';
-import { Button, Container } from '@mui/material';
+import { Button, Stack } from '@mui/material';
 import Task from '../../components/Task/Task'
 
 import { fetchAllTasksAsync } from '../../sections/Tasks/TasksSlice';
@@ -16,12 +16,15 @@ export default function Tasks() {
 	}
 
 	return (
-		<Container>
+		<Stack
+		sx={{bgcolor: '#F4F6FA', borderRadius: 5}}
+		spacing={2}
+		>
 			<Button onClick={handleFetchTasks}>Fetch Tasks</Button>
 
 			{tasksList.map((t:any) => (
 				<Task name={t.name} description={t.description} />
 			))}
-		</Container>
+		</Stack>
 	)
 }

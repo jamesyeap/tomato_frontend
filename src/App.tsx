@@ -14,7 +14,7 @@ import { store } from './store'
 function App() {
   return (
     <Provider store={store}>
-      <Container sx={{bgcolor: 'blue'}}>
+      <Container>
         {/* <DeletableCategory />
         <Category /> */}
 
