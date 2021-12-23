@@ -1,6 +1,7 @@
 import { Container } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 
+// components for testing
 import Category from './components/Category/Category';
 import DeletableCategory from './components/Category/DeletableCategory'
 import Task from './components/Task/Task';
