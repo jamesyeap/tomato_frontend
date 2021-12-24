@@ -1,56 +1,69 @@
 /* Section that holds all tasks */
-import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '../../store';
-import { Button, Grid } from '@mui/material';
+
+import { Grid, Typography } from '@mui/material';
 import { useQuery } from 'react-query'
 import Task from '../../components/Task/Task'
 
 import { fetchTasks_API } from './TasksAPI';
-import { updateTaskList, fetchAllTasksAsync } from '../../sections/Tasks/TasksSlice';
+import { updateTaskList } from '../../sections/Tasks/TasksSlice';
 
 export default function Tasks() {
-	const tasksList:any[] = useSelector((state:RootState) => state.tasks.list); 
-	const dispatch = useDispatch();
-	
 	const { isLoading, error, data } = useQuery('tasks', fetchTasks_API);
-	if (!isLoading && !error) {		
-		if (data) {			
-			dispatch(updateTaskList(( data.data )));
-		} else {
-			dispatch(updateTaskList(( [] )));
-		}
-	}
-
-	// mock fetch
-	const handleFetchTasks = () => {
-		dispatch(fetchAllTasksAsync());
-	}
-
-	return (
-		<Grid
-		container
-		spacing={2}
-		direction="column"
-		alignItems="center"
-		sx={{bgcolor: '#F4F6FA', minHeight: '90vh'}}
-		>
-			<Grid item>
-				<Button onClick={handleFetchTasks}>Mock Fetch Tasks</Button>
-			</Grid>
-
-			{tasksList.map((t:any) => (
-				<Grid item>
-					<Task
-					id={t.Id}
-					title={t.Title}
-					description={t.Description}
-					category={t.Category}
-					deadline={t.Deadline}
-					created_at={t.Created_at}
-					updated_at={t.Updated_at}				
-					/>
+	if (!isLoading) {		
+		if (data) {		
+			console.log(data.data);	
+			
+			return (
+				<Grid
+				container
+				spacing={2}
+				direction="column"
+				alignItems="center"
+				sx={{bgcolor: '#F4F6FA', minHeight: '90vh'}}
+				>
+					{data.data.map((t:any) => (
+							<Grid item>
+								<Task
+								id={t.Id}
+								title={t.Title}
+								description={t.Description}
+								category={t.Category}
+								deadline={t.Deadline}
+								completed={t.Completed}
+								created_at={t.Created_at}
+								updated_at={t.Updated_at}				
+								/>
+							</Grid>
+					))}
 				</Grid>
-			))}
-		</Grid>
-	)
+			)
+		} else {
+			// TODO: make error page
+			return (
+				<Grid container>
+					<Grid item>
+						<Typography variant="h3">An error occurred.</Typography>
+					</Grid>
+				</Grid>
+			)
+		}
+	} else if (!error) {
+		// TODO: make loading page
+		return (
+			<Grid container>
+				<Grid item>
+					<Typography variant="h3">Loading...</Typography>
+				</Grid>
+			</Grid>
+		)
+	} else {
+		// TODO: make error page
+		return (
+			<Grid container>
+				<Grid item>
+					<Typography variant="h3">An error occurred.</Typography>
+				</Grid>
+			</Grid>
+		)
+	}
 }

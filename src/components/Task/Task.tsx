@@ -9,13 +9,15 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SaveAsIcon from '@mui/icons-material/SaveAs';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import DeletableCategory from "../Category/DeletableCategory";
+import { markComplete_API, markIncomplete_API } from '../../sections/Tasks/TasksAPI';
 
 interface TaskProps {
-	id:string,
+	id:number,
 	title:string,
 	description?:string,
 	category:string,
 	deadline?:string,
+	completed:boolean,
 	created_at:string,
 	updated_at:string
 }
@@ -24,22 +26,38 @@ export default function Task(props:TaskProps) {
 	const [isExpanded, setIsExpanded] = useState(false);
 	const [isEditing, setIsEditing] = useState(false);
 
-	const [name, setName] = useState(props.title);
+	const [title, setTitle] = useState(props.title);
 	const [description, setDescription] = useState(props.description);
+	const [checked, setChecked] = useState(props.completed);
 
 	// handles control of "name" field of Task in editing mode
-	const handleChangeName = (e:any) => {
-		setName(e.target.value);
+	const handleChangeTitle = (e:any) => {
+		setTitle(e.target.value);
 	} 
 
 	// handles control of "description" field of Task in editing mode
 	const handleChangeDescription = (e:any) => {
 		setDescription(e.target.value);
-	} 
+	}
 
-	// handles completion of Tasks
-	const handleComplete = () => {
-		// TODO
+	// handles marking of Task as complete and incomplete
+	const handleChangeCheckbox = (e:any) => {
+		if (e.target.checked === true) {
+			markComplete();
+		} else {
+			markIncomplete();
+		}
+
+		setChecked(e.target.checked);
+	}
+
+	// mark Task as complete
+	const markComplete = () => {
+		markComplete_API(props.id);
+	}
+	// marks a completed Task as incomplete
+	const markIncomplete = () => {
+		markIncomplete_API(props.id);
 	}
 
 	// handles deletion of Tasks
@@ -92,7 +110,7 @@ export default function Task(props:TaskProps) {
 				
 				<Grid item>
 					{isEditing
-						? <TextField variant="outlined" fullWidth={true} multiline={true} sx={{width: 400, bgcolor:'#F4F6FA'}} value={props.title} onChange={handleChangeName} />
+						? <TextField variant="outlined" fullWidth={true} multiline={true} sx={{width: 400, bgcolor:'#F4F6FA'}} value={title} onChange={handleChangeTitle} />
 						: <Typography variant="h6" sx={{fontWeight: 'bold', color: '#646871', width: 400, borderRadius: 5, padding: 1}}>{props.title}</Typography>
 					}
 				</Grid>
@@ -103,7 +121,7 @@ export default function Task(props:TaskProps) {
 						{!isEditing 
 							? (<Grid container>
 								<Grid item>
-									<Checkbox />
+									<Checkbox value={checked} onClick={handleChangeCheckbox} />
 								</Grid>
 
 								<Grid item>

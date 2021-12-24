@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Dispatch } from "redux";
 
 export const TasksSlice = createSlice({
 	name: 'tasks',
@@ -14,14 +13,6 @@ export const TasksSlice = createSlice({
 })
 
 export const { updateTaskList } = TasksSlice.actions
-
-// thunks: use this form for functions with asynchronous calls
-export const fetchAllTasksAsync = () => (dispatch:Dispatch) => {
-	// mock fetch
-	setTimeout(() => {
-		dispatch(updateTaskList(generateMockData()));
-	}, 1000);
-}
 
 // fake data 
 function generateMockData() {
