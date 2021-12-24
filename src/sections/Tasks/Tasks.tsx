@@ -2,15 +2,26 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../store';
 import { Button, Grid } from '@mui/material';
+import { useQuery } from 'react-query'
 import Task from '../../components/Task/Task'
 
-import { fetchAllTasksAsync } from '../../sections/Tasks/TasksSlice';
+import { fetchTasks_API } from './TasksAPI';
+import { updateTaskList, fetchAllTasksAsync } from '../../sections/Tasks/TasksSlice';
 
 export default function Tasks() {
 	const tasksList:any[] = useSelector((state:RootState) => state.tasks.list); 
-	console.log(tasksList);
 	const dispatch = useDispatch();
 	
+	const { isLoading, error, data } = useQuery('tasks', fetchTasks_API);
+	if (!isLoading && !error) {		
+		if (data) {			
+			dispatch(updateTaskList(( data.data )));
+		} else {
+			dispatch(updateTaskList(( [] )));
+		}
+	}
+
+	// mock fetch
 	const handleFetchTasks = () => {
 		dispatch(fetchAllTasksAsync());
 	}
@@ -24,11 +35,21 @@ export default function Tasks() {
 		sx={{bgcolor: '#F4F6FA', minHeight: '90vh'}}
 		>
 			<Grid item>
-				<Button onClick={handleFetchTasks}>Fetch Tasks</Button>
+				<Button onClick={handleFetchTasks}>Mock Fetch Tasks</Button>
 			</Grid>
 
 			{tasksList.map((t:any) => (
-				<Grid item><Task name={t.name} description={t.description} /></Grid>
+				<Grid item>
+					<Task
+					id={t.Id}
+					title={t.Title}
+					description={t.Description}
+					category={t.Category}
+					deadline={t.Deadline}
+					created_at={t.Created_at}
+					updated_at={t.Updated_at}				
+					/>
+				</Grid>
 			))}
 		</Grid>
 	)

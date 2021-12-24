@@ -11,7 +11,7 @@ export default function SelectableCategory(props:SelectableCategoryProps) {
 
 	return (
 		<Chip 
-		label="category 1" 
+		label={props.name}
 		onClick={handleSelect} 
 		color="primary"
 		size="small"/>

@@ -11,7 +11,7 @@ export default function DeselectableCategory(props:DeselectableCategoryProps) {
 
 	return (
 		<Chip 
-		label="category 1" 
+		label={props.name}
 		onDelete={handleDeselect} 
 		color="primary"
 		size="small"/>

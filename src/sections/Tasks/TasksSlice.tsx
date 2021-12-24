@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { Dispatch } from "redux";
-import { useQuery } from 'react-query'
 
 export const TasksSlice = createSlice({
 	name: 'tasks',
@@ -8,25 +7,16 @@ export const TasksSlice = createSlice({
 		list: []
 	},
 	reducers: {
-		updateTaskList: (state, action) => {
-			// placeholder mock
+		updateTaskList: (state, action) => {			
 			return {list: action.payload};
-
-			// TODO: put actual data-fetching logic here
 		}
 	}
 })
 
 export const { updateTaskList } = TasksSlice.actions
 
-const fetchTasks_API = () => {
-	// TODO: return a Promise 
-}
-
 // thunks: use this form for functions with asynchronous calls
 export const fetchAllTasksAsync = () => (dispatch:Dispatch) => {
-	const info = useQuery('tasks', fetchTasks_API);
-
 	// mock fetch
 	setTimeout(() => {
 		dispatch(updateTaskList(generateMockData()));

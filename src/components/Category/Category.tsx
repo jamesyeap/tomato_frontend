@@ -6,6 +6,6 @@ export interface CategoryProps {
 
 export default function Category(props:CategoryProps) {
 	return (
-		<Chip label="category 1" color="primary" size="small"/>
+		<Chip label={props.name} color="primary" size="small"/>
 	)
 }

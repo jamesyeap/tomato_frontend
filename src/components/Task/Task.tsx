@@ -11,15 +11,20 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import DeletableCategory from "../Category/DeletableCategory";
 
 interface TaskProps {
-	name:string,
+	id:string,
+	title:string,
 	description?:string,
+	category:string,
+	deadline?:string,
+	created_at:string,
+	updated_at:string
 }
 
 export default function Task(props:TaskProps) {
 	const [isExpanded, setIsExpanded] = useState(false);
 	const [isEditing, setIsEditing] = useState(false);
 
-	const [name, setName] = useState(props.name);
+	const [name, setName] = useState(props.title);
 	const [description, setDescription] = useState(props.description);
 
 	// handles control of "name" field of Task in editing mode
@@ -87,8 +92,8 @@ export default function Task(props:TaskProps) {
 				
 				<Grid item>
 					{isEditing
-						? <TextField variant="outlined" fullWidth={true} multiline={true} sx={{width: 400, bgcolor:'#F4F6FA'}} value={name} onChange={handleChangeName} />
-						: <Typography variant="h6" sx={{fontWeight: 'bold', color: '#646871', width: 400, borderRadius: 5, padding: 1}}>{props.name}</Typography>
+						? <TextField variant="outlined" fullWidth={true} multiline={true} sx={{width: 400, bgcolor:'#F4F6FA'}} value={props.title} onChange={handleChangeName} />
+						: <Typography variant="h6" sx={{fontWeight: 'bold', color: '#646871', width: 400, borderRadius: 5, padding: 1}}>{props.title}</Typography>
 					}
 				</Grid>
 				
@@ -150,8 +155,8 @@ export default function Task(props:TaskProps) {
 		
 		<Grid item>
 			{isEditing
-				? (<Grid container><DeletableCategory name="category 1"/></Grid>)
-				: (<Grid container><Category name="category 1"/></Grid>)
+				? (<Grid container><DeletableCategory name={props.category}/></Grid>)
+				: (<Grid container><Category name={props.category} /></Grid>)
 			}
 		</Grid>
 	</Grid>
