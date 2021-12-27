@@ -1,5 +1,6 @@
 import { Grid, Checkbox, IconButton, Typography, Stack, Button, TextField } from "@mui/material";
 import { useState } from "react";
+import { useMutation, useQueryClient } from "react-query";
 
 import Category from "../Category/Category";
 import EditIcon from '@mui/icons-material/Edit';
@@ -8,14 +9,20 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SaveAsIcon from '@mui/icons-material/SaveAs';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import DeletableCategory from "../Category/DeletableCategory";
-import { markComplete_API, markIncomplete_API } from '../../sections/Tasks/TasksAPI';
+import UntaggableCategory from "../Category/UntaggableCategory";
 
+import { 
+	markComplete_API, 
+	markIncomplete_API,
+	updateTask_API,
+	deleteTask_API,
+} from '../../sections/Tasks/TasksAPI';
 interface TaskProps {
 	id:number,
 	title:string,
 	description?:string,
-	category:string,
+	category_id?: number,
+	category?:string,
 	deadline?:string,
 	completed:boolean,
 	created_at:string,
@@ -23,12 +30,15 @@ interface TaskProps {
 }
 
 export default function Task(props:TaskProps) {
-	const [isExpanded, setIsExpanded] = useState(false);
-	const [isEditing, setIsEditing] = useState(false);
+	const [isExpanded, setIsExpanded] = useState<boolean>(false);
+	const [isEditing, setIsEditing] = useState<boolean>(false);
 
-	const [title, setTitle] = useState(props.title);
-	const [description, setDescription] = useState(props.description);
-	const [checked, setChecked] = useState(props.completed);
+	const [title, setTitle] = useState<string>(props.title);
+	const [description, setDescription] = useState<string | undefined>(props.description);
+	const [checked, setChecked] = useState<boolean>(props.completed);
+
+	// keeps tasks shown to the user in-sync with the database
+	const queryClient = useQueryClient();
 
 	// handles control of "name" field of Task in editing mode
 	const handleChangeTitle = (e:any) => {
@@ -61,11 +71,22 @@ export default function Task(props:TaskProps) {
 	}
 
 	// handles deletion of Tasks
+	const mutateDelete = useMutation(deleteTask_API, {
+		onSuccess: () => {
+			queryClient.invalidateQueries('tasks');
+		}
+	});
 	const handleDelete = () => {
-		// TODO
+		mutateDelete.mutate(props.id);
 	}
 
 	// handles editing of Tasks
+	const mutateUpdate = useMutation(updateTask_API, {
+		onSuccess: () => {
+			queryClient.invalidateQueries('tasks');
+			setIsEditing(false);
+		}
+	});
 	const handleStartEdit = () => {
 		// TODO
 		setIsEditing(true);
@@ -77,6 +98,13 @@ export default function Task(props:TaskProps) {
 	}
 	const handleSaveEdit = () => {
 		// TODO
+		mutateUpdate.mutate({
+			id: props.id,
+			title: title,
+			description: description,
+			deadline: props.deadline,
+			category_id: props.category_id
+		})
 	}
 
 	// handles expansion and minimizing of Tasks
@@ -121,7 +149,7 @@ export default function Task(props:TaskProps) {
 						{!isEditing 
 							? (<Grid container>
 								<Grid item>
-									<Checkbox value={checked} onClick={handleChangeCheckbox} />
+									<Checkbox checked={checked} onClick={handleChangeCheckbox} />
 								</Grid>
 
 								<Grid item>
@@ -131,14 +159,14 @@ export default function Task(props:TaskProps) {
 								</Grid>
 
 								<Grid item>
-									<IconButton>
+									<IconButton onClick={handleDelete}>
 										<DeleteOutlineIcon />
 									</IconButton>
 								</Grid>
 							</Grid>)
 							: (<Grid container>
 								<Grid item>
-									<IconButton>
+									<IconButton onClick={handleSaveEdit}>
 										<SaveAsIcon />
 									</IconButton>
 								</Grid>
@@ -173,7 +201,9 @@ export default function Task(props:TaskProps) {
 		
 		<Grid item>
 			{isEditing
-				? (<Grid container><DeletableCategory name={props.category}/></Grid>)
+				? (props.category) 
+					? (<Grid container><UntaggableCategory name={props.category}/></Grid>)
+					: (<Grid container><Category name={"unassigned"} /></Grid>)
 				: (<Grid container><Category name={props.category} /></Grid>)
 			}
 		</Grid>

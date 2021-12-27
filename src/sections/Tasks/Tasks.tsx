@@ -5,7 +5,6 @@ import { useQuery } from 'react-query'
 import Task from '../../components/Task/Task'
 
 import { fetchTasks_API } from './TasksAPI';
-import { updateTaskList } from '../../sections/Tasks/TasksSlice';
 
 export default function Tasks() {
 	const { isLoading, error, data } = useQuery('tasks', fetchTasks_API);
@@ -24,14 +23,15 @@ export default function Tasks() {
 					{data.data.map((t:any) => (
 							<Grid item>
 								<Task
-								id={t.Id}
-								title={t.Title}
-								description={t.Description}
-								category={t.Category}
-								deadline={t.Deadline}
-								completed={t.Completed}
-								created_at={t.Created_at}
-								updated_at={t.Updated_at}				
+								id={t.id}
+								title={t.title}
+								description={t.description}
+								category={t.category}
+								category_id={t.category_id}
+								deadline={t.deadline}
+								completed={t.completed}
+								created_at={t.created_at}
+								updated_at={t.updated_at}
 								/>
 							</Grid>
 					))}

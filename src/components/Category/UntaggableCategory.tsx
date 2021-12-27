@@ -1,10 +1,10 @@
 import { Chip } from "@mui/material";
 
-export interface DeletableCategoryProps {
+export interface UntaggableCategoryProps {
 	name:string,
 }
 
-export default function DeletableCategory(props:DeletableCategoryProps) {
+export default function UntaggableCategory(props:UntaggableCategoryProps) {
 	const handleDelete = () => {
 		// TODO
 	}

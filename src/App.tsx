@@ -3,7 +3,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 
 // components for testing
 import Category from './components/Category/Category';
-import DeletableCategory from './components/Category/DeletableCategory'
+import Untaggableategory from './components/Category/UntaggableCategory'
 import Task from './components/Task/Task';
 import Tasks from './sections/Tasks/Tasks';
 
@@ -12,25 +12,19 @@ import {
   QueryClientProvider
 } from 'react-query';
 
-// store
-import { Provider } from 'react-redux'
-import { store } from './store'
-
 const queryClient = new QueryClient();
 
 function App() {
   return (
-    <Provider store={store}>
       <QueryClientProvider client={queryClient}>
         <Container>
-          {/* <DeletableCategory /> */}
+          {/* <UntaggableCategory /> */}
           {/* <Category /> */}
 
           {/* <Task name="Task 1" description="hello"/> */}
           <Tasks />
         </Container>
       </QueryClientProvider>
-    </Provider>
   );
 }
 
