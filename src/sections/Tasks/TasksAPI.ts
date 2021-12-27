@@ -21,6 +21,15 @@ export const fetchTaskByID_API = (id:number) => {
 	);
 }
 
+export const fetchTaskByCategoryID_API = (category_id:number) => {
+	console.log("fetching category_id: %d", category_id);
+
+	return axios.post(
+		"http://tomato-backend-api.herokuapp.com/gettaskbycategoryid",
+		{ category_id: category_id }
+	)
+}
+
 export const markComplete_API = (id:number) => {
 	return axios.post(
 		"https://tomato-backend-api.herokuapp.com/completetask",

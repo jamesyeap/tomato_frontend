@@ -2,31 +2,60 @@
 
 import { Grid, Typography } from '@mui/material';
 import { useQuery } from 'react-query'
+import { useEffect } from 'react';
+
+import { CategoryProps } from '../../components/Category/Category';
 import Task from '../../components/Task/Task'
+import { fetchTaskByCategoryID_API, fetchTasks_API } from './TasksAPI';
 
-import { fetchTasks_API } from './TasksAPI';
+export enum Filter {
+	None,
+	CategoryOnly,
+	CompletedOnly,
+	CategoryAndCompleted
+}
+interface TasksParams {
+	currFilter: Filter,
+	selectedCategory: CategoryProps|null
+}
 
-export default function Tasks() {
-	const { isLoading, error, data } = useQuery('tasks', fetchTasks_API);
+export default function Tasks(props:TasksParams) {
+	let selectedFunc_API;
+	
+	switch (props.currFilter) {
+		case Filter.CategoryOnly:
+			selectedFunc_API = () => fetchTaskByCategoryID_API(props.selectedCategory ? props.selectedCategory.category_id : -1);
+			break;
+		case Filter.CompletedOnly:
+			selectedFunc_API = fetchTasks_API;
+			break;
+		case Filter.CategoryAndCompleted:
+			selectedFunc_API = () => fetchTaskByCategoryID_API(props.selectedCategory ? props.selectedCategory.category_id : -1);
+			break;
+		default:
+			selectedFunc_API = fetchTasks_API;
+	}
+
+	const { isLoading, error, data } = useQuery('tasks', selectedFunc_API);
+	
 	if (!isLoading) {		
-		if (data) {		
-			console.log(data.data);	
-			
+		if (data) {					
 			return (
 				<Grid
 				container
 				spacing={2}
 				direction="column"
 				alignItems="center"
-				sx={{bgcolor: '#F4F6FA', minHeight: '90vh'}}
+				sx={{bgcolor: '#F4F6FA', minHeight: '90vh', width: '60vw'}}
 				>
-					{data.data.map((t:any) => (
+					{data.data 
+						? data.data.map((t:any) => (
 							<Grid item>
 								<Task
 								id={t.id}
 								title={t.title}
 								description={t.description}
-								category={t.category}
+								category_name={t.category}
 								category_id={t.category_id}
 								deadline={t.deadline}
 								completed={t.completed}
@@ -34,7 +63,10 @@ export default function Tasks() {
 								updated_at={t.updated_at}
 								/>
 							</Grid>
-					))}
+					))
+						: <Grid item>No todos</Grid>
+
+					}
 				</Grid>
 			)
 		} else {

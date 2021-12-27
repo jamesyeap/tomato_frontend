@@ -1,18 +1,15 @@
 import { Chip } from "@mui/material";
 
 export interface UntaggableCategoryProps {
-	name:string,
+	category_name:string,
+	handleUntag:any
 }
 
 export default function UntaggableCategory(props:UntaggableCategoryProps) {
-	const handleDelete = () => {
-		// TODO
-	}
-
 	return (
 		<Chip 
-		label={props.name}
-		onDelete={handleDelete} 
+		label={props.category_name}
+		onDelete={props.handleUntag} 
 		color="primary" 
 		size="small"/>
 	)

@@ -22,7 +22,7 @@ interface TaskProps {
 	title:string,
 	description?:string,
 	category_id?: number,
-	category?:string,
+	category_name?:string,
 	deadline?:string,
 	completed:boolean,
 	created_at:string,
@@ -35,6 +35,7 @@ export default function Task(props:TaskProps) {
 
 	const [title, setTitle] = useState<string>(props.title);
 	const [description, setDescription] = useState<string | undefined>(props.description);
+	const [categoryID, setCategoryID] = useState<number | undefined>(props.category_id);
 	const [checked, setChecked] = useState<boolean>(props.completed);
 
 	// keeps tasks shown to the user in-sync with the database
@@ -93,11 +94,14 @@ export default function Task(props:TaskProps) {
 		setIsExpanded(false);
 	}
 	const handleDiscardEdit = () => {
-		// TODO
+		// reset state to initial values
+		setTitle(props.title);
+		setDescription(props.description);
+		setCategoryID(props.category_id);
+
 		setIsEditing(false);
 	}
 	const handleSaveEdit = () => {
-		// TODO
 		mutateUpdate.mutate({
 			id: props.id,
 			title: title,
@@ -201,10 +205,10 @@ export default function Task(props:TaskProps) {
 		
 		<Grid item>
 			{isEditing
-				? (props.category) 
-					? (<Grid container><UntaggableCategory name={props.category}/></Grid>)
-					: (<Grid container><Category name={"unassigned"} /></Grid>)
-				: (<Grid container><Category name={props.category} /></Grid>)
+				? (props.category_name) 
+					? (<Grid container><UntaggableCategory category_name={props.category_name} handleUntag={() => setCategoryID(undefined)} /></Grid>)
+					: (<Grid container><Category category_name="unassigned" /></Grid>)
+				: (<Grid container><Category category_name={props.category_name ? props.category_name : "unassigned"} /></Grid>)
 			}
 		</Grid>
 	</Grid>

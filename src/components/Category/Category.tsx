@@ -1,13 +1,17 @@
 import { Chip } from "@mui/material";
-
 export interface CategoryProps {
-	name?:string
+	category_title:string,
+	category_id:number
 }
 
-export default function Category(props:CategoryProps) {
+interface CategoryInputProps {
+	category_name:string
+}
+
+export default function Category(props:CategoryInputProps) {
 	return (
 		<Chip 
-			label={props.name ? props.name : "unassigned"} 
+			label={props.category_name} 
 			color="primary" 
 			size="small"
 		/>
